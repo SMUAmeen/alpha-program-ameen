@@ -18,274 +18,122 @@ This repository contains materials organized by levels (L1, L2) and weeks, along
   - Week1 through Week8
 - **Final_Project**: Final project materials
 
-## Getting Started
+## Getting Started (Easy Setup Guide)
 
-Choose your level and navigate to the corresponding week to find materials and instructions.
+### Step 1: One-Time Setup (Do this first!)
 
-## Step 1: Create Your Own Copy of the Repository
+1. **Install GitHub Desktop**
+   - Go to [GitHub Desktop Download Page](https://desktop.github.com/)
+   - Download and install GitHub Desktop for your computer
+   - If you don't have a GitHub account, create one at [GitHub.com](https://github.com)
+   - Open GitHub Desktop and sign in with your GitHub account
 
-1. Go to the [Traders@SMU student-template repository](https://github.com/Traders-SMU/student-template)
-2. Click the green "Use this template" button near the top of the page
-3. Select "Create a new repository"
-4. Name your repository following this format: `traders-smu-LEVEL-FULLNAME`
-   - Replace LEVEL with either L1 or L2 (e.g., L1 for Junior, L2 for Associate)
-   - Replace FULLNAME with your full name, using hyphens instead of spaces
-   - Example: `traders-smu-L1-john-smith` or `traders-smu-L2-jane-doe`
-5. Choose whether to make it public or private
-6. Click "Create repository from template"
+2. **Get Access to Traders@SMU**
+   - Email your instructor with:
+     - Your full name
+     - Your GitHub username
+     - Your program level (L1 or L2)
+   - Wait for confirmation email that you've been added to the organization
 
-## Step 2: Clone the Repository to Your Computer
+### Step 2: Create Your Repository
 
-### Using GitHub Desktop (Recommended for beginners):
+1. **Create from Template**
+   - Go to the [Traders@SMU student-template](https://github.com/Traders-SMU/student-template)
+   - Click the green "Use this template" button
+   - Select "Create a new repository"
+   - For repository name, use this format exactly: `traders-smu-LEVEL-FULLNAME`
+     - Example: If you're John Smith in L1: `traders-smu-L1-john-smith`
+     - Example: If you're Jane Doe in L2: `traders-smu-L2-jane-doe`
+   - Choose "Private" for repository visibility
+   - Click "Create repository from template"
 
-1. Open GitHub Desktop
-2. Click "File" → "Clone repository"
-3. Select your newly created repository
-4. Choose where to save it on your computer
-5. Click "Clone"
+### Step 3: Set Up Local Copy
 
-### Using Git Command Line:
-```bash
-# Navigate to where you want to store the repository
-cd Documents/Projects
+1. **Clone with GitHub Desktop**
+   - Open GitHub Desktop
+   - Click "File" → "Clone repository"
+   - Find your new repository in the list
+   - Choose where to save it on your computer
+     - Remember this location! You'll need it later
+   - Click "Clone"
 
-# Clone your repository (replace USERNAME and REPO-NAME with your information)
-git clone https://github.com/USERNAME/REPO-NAME.git
+### Step 4: Set Up Automatic Sync (One-Time Setup)
 
-# Move into the repository folder
-cd REPO-NAME
+1. **Create the Sync File**
+   - In GitHub Desktop, click "Repository" → "Open in Finder/Explorer"
+   - Create these folders inside your repository: `.github/workflows`
+   - Inside the `workflows` folder, create a new file named `sync-to-org.yml`
+   - Open this file in any text editor (Notepad, TextEdit, etc.)
+   - Copy and paste this exact text:
+
+```yaml
+name: Sync to Traders@SMU
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  sync-to-org:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
+      - name: Push to Traders@SMU
+        run: |
+          git remote add traders-smu https://${{ secrets.GITHUB_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
+          git push traders-smu --all --force
+          git push traders-smu --tags --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
 ```
 
-## Step 3: Find Your Level and Week
-
-1. Open the repository folder on your computer
-2. Navigate to either the L1 (Junior) or L2 (Associate) folder, depending on your program level
-3. Find the folder for the current week (Week1, Week2, etc.)
-4. Read the README.md file in that folder for instructions on the week's assignment
-
-## Step 4: Complete Your Assignment
-
-1. Edit the files as instructed in the weekly README
-2. For Week 1, fill out the Personal Goals Document with your information
-3. For subsequent weeks, complete the coding assignments and exercises
-
-## Step 5: Submit Your Assignment
-
-### Using GitHub Desktop:
-
-1. Open GitHub Desktop
-2. You'll see a list of changed files
-3. Enter a summary of your changes (e.g., "Completed Week 1 assignment")
-4. Click "Commit to main"
-5. Click "Push origin" to upload your changes
-
-### Using Git Command Line:
-```bash
-# Create a branch for your submission (replace X with your level and Y with the week)
-git checkout -b LX-WY-submission
-
-# Add all your changes
-git add .
-
-# Commit your changes with a message
-git commit -m "Completed Week Y assignment"
-
-# Push your changes to GitHub
-git push origin LX-WY-submission
-```
-
-## Step 6: Create a Pull Request
-
-1. Go to your repository on GitHub
-2. You should see a message about your recently pushed branch
-3. Click "Compare & pull request"
-4. Add any comments about your submission
-5. Click "Create pull request"
-
-## Step 7: Transfer Your Repository to Traders@SMU Organization
-
-There are three methods to transfer your repository to the Traders@SMU organization. Choose the method that best suits your comfort level with Git and GitHub.
-
-### Method 1: GitHub Web Interface Transfer (Recommended for Beginners)
-
-1. Go to your repository's settings on GitHub:
-   - Navigate to your repository page
-   - Click on "Settings" in the top menu bar
-   - Scroll down to the "Danger Zone" section
-   - Click "Transfer" under "Transfer ownership"
-
-2. In the transfer dialog:
-   - Type your repository name to confirm
-   - Enter "Traders-SMU" as the new owner
-   - Click "I understand, transfer this repository"
-
-3. After the transfer:
-   - Update your local repository's remote URL:
-     ```bash
-     git remote set-url origin https://github.com/Traders-SMU/your-repository-name.git
-     ```
-   - Verify the new remote URL:
-     ```bash
-     git remote -v
-     ```
-
-### Method 2: Organization Invitation (Recommended for Team Collaboration)
-
-1. Request an invitation to the Traders@SMU organization:
-   - Contact your program administrator
-   - Provide your GitHub username
-   - Wait for the invitation email from GitHub
-
-2. Accept the organization invitation:
-   - Click the invitation link in your email
-   - Or go to https://github.com/Traders-SMU
-   - Click "View Invitation" and accept it
-
-3. Transfer your repository:
-   - Follow the same steps as Method 1
-   - You'll now have direct access to the organization
-
-4. Set up branch protection (Optional):
-   - Go to repository settings
-   - Click "Branches" in the left sidebar
-   - Add branch protection rules as specified by your administrator
-
-### Method 3: Command Line Transfer (Advanced Users)
-
-1. Create a new repository in the Traders@SMU organization:
-   - Get organization admin access (contact your program administrator)
-   - Use the GitHub API to create a new repository:
-     ```bash
-     curl -X POST -H "Authorization: token YOUR_GITHUB_TOKEN" \
-     https://api.github.com/orgs/Traders-SMU/repos \
-     -d '{"name":"your-repository-name","private":true}'
-     ```
-
-2. Push your existing repository:
-   ```bash
-   # Add the new remote
-   git remote add organization https://github.com/Traders-SMU/your-repository-name.git
-   
-   # Push all branches and tags
-   git push organization --all
-   git push organization --tags
-   
-   # Set the organization remote as your new origin
-   git remote remove origin
-   git remote rename organization origin
-   ```
-
-3. Verify the transfer:
-   ```bash
-   git remote -v
-   git fetch origin
-   git status
-   ```
-
-### Automated Repository Updates (Recommended Setup)
-
-To automatically sync your repository with the Traders@SMU organization, you can set up GitHub Actions. This will ensure your work is always backed up and visible to your instructors.
-
-1. Create a new file in your repository at `.github/workflows/sync-to-org.yml`:
-   ```bash
-   mkdir -p .github/workflows
-   touch .github/workflows/sync-to-org.yml
-   ```
-
-2. Add the following content to `sync-to-org.yml`:
-   ```yaml
-   name: Sync to Traders@SMU
-
-   on:
-     push:
-       branches:
-         - main
-     schedule:
-       - cron: '0 0 * * *'  # Runs daily at midnight
-
-   jobs:
-     sync-to-org:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout repository
-           uses: actions/checkout@v2
-           with:
-             fetch-depth: 0
-             
-         - name: Push to Traders@SMU
-           run: |
-             git remote add traders-smu https://${{ secrets.GITHUB_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
-             git push traders-smu --all --force
-             git push traders-smu --tags --force
-           env:
-             GITHUB_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
-   ```
-
-3. Set up the required secret:
-   - Contact your program administrator to get your `ORG_SYNC_TOKEN`
-   - Go to your repository settings
-   - Click on "Secrets and variables" → "Actions"
+2. **Add the Sync Token**
+   - Your instructor will send you an `ORG_SYNC_TOKEN`
+   - Go to your repository on GitHub.com
+   - Click "Settings" → "Secrets and variables" → "Actions"
    - Click "New repository secret"
-   - Name: `ORG_SYNC_TOKEN`
-   - Value: (paste the token provided by your administrator)
+   - For name, type: `ORG_SYNC_TOKEN`
+   - For value, paste the token your instructor sent
+   - Click "Add secret"
 
-4. Verify the setup:
-   - Make a small change to any file
-   - Commit and push to your repository
-   - Go to the "Actions" tab on GitHub
-   - You should see the sync workflow running
+### Step 5: Daily Usage
 
-This automation will:
-- Sync your repository whenever you push to main
-- Perform a daily backup at midnight
-- Maintain your repository name format in the organization
-- Keep all branches and tags synchronized
+1. **View or Edit Files**
+   - Open GitHub Desktop
+   - Click on your repository
+   - Click "Open in Finder/Explorer" to view files
+   - Make changes to files as needed for assignments
 
-### Important Automation Notes
+2. **Save Your Changes**
+   - In GitHub Desktop, you'll see your changes listed
+   - Add a short description of what you did
+   - Click "Commit to main"
+   - Click "Push origin" to save to GitHub
 
-1. **Repository Naming**:
-   - The automation assumes your repository follows the naming convention: `traders-smu-LEVEL-FULLNAME`
-   - If you need to rename your repository, contact your administrator
+That's it! Your work will automatically sync to the Traders@SMU organization.
 
-2. **Sync Frequency**:
-   - Immediate sync: Happens after every push to main
-   - Daily backup: Runs at midnight UTC
-   - You can manually trigger a sync from the Actions tab
+### Need Help?
 
-3. **Troubleshooting Automation**:
-   - Check the Actions tab for error messages
-   - Ensure your `ORG_SYNC_TOKEN` is set correctly
-   - Verify your repository name follows the convention
-   - Contact your administrator if sync fails consistently
+If you get stuck:
+1. Ask your instructor for help
+2. Send screenshots of any error messages
+3. Share your repository name and GitHub username
 
-4. **Security Considerations**:
-   - Never share your `ORG_SYNC_TOKEN`
-   - Don't modify the workflow file unless instructed
-   - Report any security concerns to your administrator
+### Alternative Setup Methods
 
-### Additional Resources
+If you're comfortable with Git and GitHub, you can also:
+1. Use the GitHub web interface directly
+2. Use Visual Studio Code's Git features
+3. Use other Git GUI clients
 
-- [GitHub Docs: Transferring a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository)
-- [GitHub Docs: About organizations](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations)
-- [GitHub API Documentation](https://docs.github.com/en/rest/reference/repos#transfer-a-repository)
-- [Git Command Line Reference](https://git-scm.com/docs)
-
-### Important Notes
-
-1. **Before transferring:**
-   - Make sure you have a backup of your repository
-   - Complete any pending commits and pushes
-   - Document any open issues or pull requests
-
-2. **After transferring:**
-   - Update any local repository references
-   - Notify collaborators of the new repository location
-   - Update any continuous integration or deployment settings
-
-3. **Troubleshooting:**
-   - If you encounter permission issues, contact the organization administrator
-   - For failed transfers, check GitHub's status page: https://www.githubstatus.com/
-   - Keep your Git credentials updated and secure
+For advanced setup instructions, scroll down to the "Advanced Setup Options" section below.
 
 ## Receiving Updates Throughout the Course
 
