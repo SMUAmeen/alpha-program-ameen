@@ -111,13 +111,50 @@ jobs:
    - Click "Open in Finder/Explorer" to view files
    - Make changes to files as needed for assignments
 
-2. **Save Your Changes**
-   - In GitHub Desktop, you'll see your changes listed
-   - Add a short description of what you did
-   - Click "Commit to main"
-   - Click "Push origin" to save to GitHub
+2. **Save Your Changes (Super Easy Method)**
+   - In GitHub Desktop:
+     - Click the "Fetch origin" button (↓) at the top
+     - Click "Pull origin" if it appears
+     - Type a short note about what you changed
+     - Click "Commit to main"
+     - Click "Push origin" (↑)
 
 That's it! Your work will automatically sync to the Traders@SMU organization.
+
+### Getting Course Updates (New Super Easy Method!)
+
+We've made it super simple to get new course materials! Just follow these steps:
+
+1. **One-Time Setup**
+   - Go to your repository on GitHub.com
+   - Click the "⚙️ Settings" tab
+   - Click "Actions" on the left sidebar
+   - Under "General", scroll to "Workflow permissions"
+   - Select "Read and write permissions"
+   - Click "Save"
+
+2. **Enable Auto-Updates**
+   - Still in Settings, click "Actions" → "General"
+   - Scroll to "Allow GitHub Actions to create and approve pull requests"
+   - Check this box
+   - Click "Save"
+
+That's all! Your repository will now:
+- Automatically check for new course materials every day
+- Create a pull request when new materials are available
+- Show you a notification when updates are ready
+- Let you click one button to update
+
+When you see "Updates Available" at the top of your repository:
+1. Click the "Pull requests" tab
+2. Click the "Update course materials" pull request
+3. Click the green "Merge pull request" button
+
+Then in GitHub Desktop:
+1. Click "Fetch origin" (↓)
+2. Click "Pull origin"
+
+Done! You now have the latest course materials! 🎉
 
 ### Need Help?
 
