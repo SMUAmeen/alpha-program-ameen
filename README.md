@@ -99,6 +99,110 @@ git push origin LX-WY-submission
 4. Add any comments about your submission
 5. Click "Create pull request"
 
+## Step 7: Transfer Your Repository to Traders@SMU Organization
+
+There are three methods to transfer your repository to the Traders@SMU organization. Choose the method that best suits your comfort level with Git and GitHub.
+
+### Method 1: GitHub Web Interface Transfer (Recommended for Beginners)
+
+1. Go to your repository's settings on GitHub:
+   - Navigate to your repository page
+   - Click on "Settings" in the top menu bar
+   - Scroll down to the "Danger Zone" section
+   - Click "Transfer" under "Transfer ownership"
+
+2. In the transfer dialog:
+   - Type your repository name to confirm
+   - Enter "Traders-SMU" as the new owner
+   - Click "I understand, transfer this repository"
+
+3. After the transfer:
+   - Update your local repository's remote URL:
+     ```bash
+     git remote set-url origin https://github.com/Traders-SMU/your-repository-name.git
+     ```
+   - Verify the new remote URL:
+     ```bash
+     git remote -v
+     ```
+
+### Method 2: Organization Invitation (Recommended for Team Collaboration)
+
+1. Request an invitation to the Traders@SMU organization:
+   - Contact your program administrator
+   - Provide your GitHub username
+   - Wait for the invitation email from GitHub
+
+2. Accept the organization invitation:
+   - Click the invitation link in your email
+   - Or go to https://github.com/Traders-SMU
+   - Click "View Invitation" and accept it
+
+3. Transfer your repository:
+   - Follow the same steps as Method 1
+   - You'll now have direct access to the organization
+
+4. Set up branch protection (Optional):
+   - Go to repository settings
+   - Click "Branches" in the left sidebar
+   - Add branch protection rules as specified by your administrator
+
+### Method 3: Command Line Transfer (Advanced Users)
+
+1. Create a new repository in the Traders@SMU organization:
+   - Get organization admin access (contact your program administrator)
+   - Use the GitHub API to create a new repository:
+     ```bash
+     curl -X POST -H "Authorization: token YOUR_GITHUB_TOKEN" \
+     https://api.github.com/orgs/Traders-SMU/repos \
+     -d '{"name":"your-repository-name","private":true}'
+     ```
+
+2. Push your existing repository:
+   ```bash
+   # Add the new remote
+   git remote add organization https://github.com/Traders-SMU/your-repository-name.git
+   
+   # Push all branches and tags
+   git push organization --all
+   git push organization --tags
+   
+   # Set the organization remote as your new origin
+   git remote remove origin
+   git remote rename organization origin
+   ```
+
+3. Verify the transfer:
+   ```bash
+   git remote -v
+   git fetch origin
+   git status
+   ```
+
+### Additional Resources
+
+- [GitHub Docs: Transferring a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository)
+- [GitHub Docs: About organizations](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations)
+- [GitHub API Documentation](https://docs.github.com/en/rest/reference/repos#transfer-a-repository)
+- [Git Command Line Reference](https://git-scm.com/docs)
+
+### Important Notes
+
+1. **Before transferring:**
+   - Make sure you have a backup of your repository
+   - Complete any pending commits and pushes
+   - Document any open issues or pull requests
+
+2. **After transferring:**
+   - Update any local repository references
+   - Notify collaborators of the new repository location
+   - Update any continuous integration or deployment settings
+
+3. **Troubleshooting:**
+   - If you encounter permission issues, contact the organization administrator
+   - For failed transfers, check GitHub's status page: https://www.githubstatus.com/
+   - Keep your Git credentials updated and secure
+
 ## Receiving Updates Throughout the Course
 
 As the course progresses, we'll add new materials for upcoming weeks (Week 2, Week 3, etc.). You'll need to update your repository to get these new materials. Here's how:
