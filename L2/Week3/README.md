@@ -6,26 +6,22 @@ This directory contains materials for Level 2, Week 3 of the Alpha Program.
 
 ## Learning Objectives
 
-- Master advanced statistical methods for finance
-- Understand stochastic processes in financial modeling
-- Develop skills in econometric analysis
+- Learn the basic mathematics behind pairs trading and other statistical arbitration strategies
+- Understand important satistical markers and assumptions for successful statistical arbitrage
 
 ## Assignment Instructions
 
 Complete the following tasks:
 
-1. Task 1: [Description]
-2. Task 2: [Description]
-3. Task 3: [Description]
+1. Homework assignment listed in the last cell of the Session 3 .ipynb
 
 ## Submission Guidelines
 
-- Complete all tasks in this directory
 - Submit your work by creating a pull request with branch name `L2-W3-submission`
-- Deadline: [Date]
+- Deadline: Next meeting day, 3/26/25. First Wednesday following Spring Break.
 
 ## Resources
 
-- [Resource 1]
-- [Resource 2]
-- [Resource 3] 
+- Python notebook provided for the lecture (should contain everything you need)
+- Lecture Slides
+- https://www.youtube.com/watch?v=vvTKjm94Ars, https://www.youtube.com/watch?v=q5wbOSjbVW4
