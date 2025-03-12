@@ -2,47 +2,6 @@
 
 Welcome to your learning journey! This repository is structured to guide you through a progressive learning path with organized materials, exercises, and projects.
 
-## 👨‍🏫 For Administrators Only
-
-### Setting Up Organization Tokens
-
-1. **Create an Organization-wide Token**:
-   - Go to your organization settings: `https://github.com/organizations/Traders-SMU/settings`
-   - Click "Developer settings" at the bottom of the left sidebar
-   - Click "Personal access tokens" → "Fine-grained tokens"
-   - Click "Generate new token"
-   - Configure the token:
-     - Token name: "Student Repository Access"
-     - Description: "Token for student repository syncing"
-     - Resource owner: Select "Traders-SMU"
-     - Repository access: "All repositories"
-     - Permissions:
-       - Repository permissions:
-         - Actions: Read and write
-         - Contents: Read and write
-         - Metadata: Read-only
-         - Pull requests: Read and write
-         - Workflows: Read and write
-   - Click "Generate token"
-   - 📝 SAVE THIS TOKEN! You'll need to share it with students
-   - The token will look like `github_pat_` or `ghp_`
-
-2. **Distribute Tokens to Students**:
-   - Create a secure method to share the token (e.g., encrypted email or secure messaging)
-   - Never share tokens in public channels or repositories
-   - Keep a record of which students have received tokens
-   - Consider rotating tokens periodically for security
-
-3. **Monitor Token Usage**:
-   - Regularly check organization audit logs
-   - Review token access patterns
-   - Revoke and regenerate tokens if suspicious activity is detected
-
-4. **Repository Setup**:
-   - Enable Actions in organization settings
-   - Set branch protection rules
-   - Configure repository visibility settings
-
 ## Welcome
 
 This repository serves as your central hub for all course materials. Each level is broken down into weekly modules, allowing you to progress at a steady pace while building on previous knowledge.
@@ -100,32 +59,99 @@ This repository contains materials organized by levels (L1, L2) and weeks, along
 
 ### Step 4: Set Up Automatic Sync (One-Time Setup)
 
-1. **Get Your Access Token** (Important!)
+1. **Get Your Access Tokens** (Important! 🔑)
    
-   You only need one token for setup (your instructor will provide it):
+   You need two special passwords (tokens) to set up syncing. Let's get them one at a time:
 
-   **Organization Access Token**:
-   - Your instructor will give you a token in class
-   - It will look like `github_pat_` or `ghp_`
-   - Save it somewhere safe - you'll need it in the next step!
-   - Never share this token with anyone else
+   a) **First Token: GitHub Personal Access Token**
+   1. Open a new tab and go to [GitHub Settings](https://github.com/settings/tokens)
+   2. Click the blue "Generate new token" button
+   3. Click "Generate new token (classic)"
+   4. Fill out the form:
+      ```
+      Note: Course Access Token
+      Expiration: No expiration
+      ```
+   5. Scroll down and check these boxes exactly:
+      ```
+      [x] repo
+          [x] repo:status
+          [x] repo_deployment
+          [x] public_repo
+          [x] repo:invite
+          [x] security_events
+      [x] workflow
+      [x] admin:org
+          [x] write:org
+          [x] read:org
+      ```
+   6. Scroll to bottom and click "Generate token"
+   7. 🚨 **IMPORTANT**: You will see a green box with your token
+      - It looks like: ghp_XXXXXXXXXXXXXXXXX
+      - Copy this token RIGHT NOW
+      - Paste it into a safe place (Notes app, password manager)
+      - You will NEVER see this token again if you leave the page!
 
-2. **Add Your Token to GitHub**
-   - Go to your repository on GitHub.com
-   - Click "Settings" tab
-   - Click "Secrets and variables" → "Actions"
-   - Click "New repository secret"
-   - Add the token:
-     - Name: `ORG_SYNC_TOKEN`
-     - Value: Paste the token from your instructor
-     - Click "Add secret"
+   b) **Second Token: Organization Sync Token**
+   1. In your class:
+      - Ask your instructor for the "Org Sync Token"
+      - They will give you a code starting with `ghp_` or `github_pat_`
+      - Copy this token to the same safe place as your first token
+   
+   ✅ **Token Checklist**:
+   - [ ] I have my GitHub Personal Access Token saved
+   - [ ] I have the Organization Sync Token from my instructor
+   - [ ] Both tokens are saved somewhere safe
+   - [ ] I haven't shared these tokens with anyone
 
-3. **Create the Sync File**
-   - In GitHub Desktop, click "Repository" → "Open in Finder/Explorer"
-   - Create these folders inside your repository: `.github/workflows`
-   - Inside the `workflows` folder, create a new file named `sync-to-org.yml`
-   - Open this file in any text editor (Notepad, TextEdit, etc.)
-   - Copy and paste this exact text:
+2. **Add Your Tokens to GitHub** (🔒 Security Setup)
+   
+   Now let's add these tokens to your repository:
+
+   a) **Open Your Repository Settings**:
+   1. Go to your repository on GitHub.com
+   2. Click the "⚙️ Settings" tab (near the top)
+   3. Look at the left sidebar
+   4. Click "Secrets and variables"
+   5. Click "Actions"
+
+   b) **Add First Token** (GitHub Token):
+   1. Click the green "New repository secret" button
+   2. Fill in the form:
+      ```
+      Name: GITHUB_TOKEN
+      Value: [Paste your GitHub Personal Access Token]
+      ```
+   3. Click "Add secret"
+   4. You should see "GITHUB_TOKEN" in the list
+
+   c) **Add Second Token** (Org Token):
+   1. Click "New repository secret" again
+   2. Fill in the form:
+      ```
+      Name: ORG_SYNC_TOKEN
+      Value: [Paste the token from your instructor]
+      ```
+   3. Click "Add secret"
+   4. You should see both "GITHUB_TOKEN" and "ORG_SYNC_TOKEN" listed
+
+3. **Create the Sync File** (📁 File Setup)
+   
+   Now we'll create the file that makes everything work:
+
+   a) **Create Folders**:
+   1. Open GitHub Desktop
+   2. Click "Repository" in the top menu
+   3. Click "Open in Finder" (Mac) or "Open in Explorer" (Windows)
+   4. In your repository folder:
+      - Create a new folder called `.github`
+      - Inside `.github`, create another folder called `workflows`
+      
+   b) **Create File**:
+   1. Open any text editor (Notepad, TextEdit, VS Code)
+   2. Create a new file
+   3. Save it as `sync-to-org.yml` in the `.github/workflows` folder
+   4. Copy and paste this exact text (every character matters!):
 
 ```yaml
 name: Sync to Traders@SMU
@@ -148,28 +174,68 @@ jobs:
           
       - name: Push to Traders@SMU
         run: |
-          git remote add traders-smu https://${{ secrets.ORG_SYNC_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
+          git remote add traders-smu https://${{ secrets.GITHUB_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
           git push traders-smu --all --force
           git push traders-smu --tags --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
 ```
 
-4. **Test Your Setup**
-   - Go to the "Actions" tab in your repository
-   - You should see "Sync to Traders@SMU" workflow
-   - Make a small test change (like add a space to README.md)
-   - Commit and push the change
-   - Check if the sync works (green checkmark)
+4. **Test Your Setup** (✅ Verification)
+   
+   Let's make sure everything works:
 
-❗ **Important Token Safety**:
-- Never share your token with anyone
-- Don't put the token in any files
-- If you accidentally expose the token, tell your instructor immediately
-- Keep your token somewhere safe - it's like a password!
+   a) **Check Actions Tab**:
+   1. Go to your repository on GitHub.com
+   2. Click the "Actions" tab
+   3. You should see "Sync to Traders@SMU" listed
 
-🆘 **Token Problems?**
-1. Check the token name is exactly `ORG_SYNC_TOKEN`
-2. Make sure you copied the entire token (it's long!)
-3. Ask your instructor for help if needed
+   b) **Make a Test Change**:
+   1. Open the README.md file in your repository
+   2. Add a space at the end of any line
+   3. In GitHub Desktop:
+      - Type "Test sync setup" in the summary
+      - Click "Commit to main"
+      - Click "Push origin"
+   4. Go back to the Actions tab
+   5. You should see a new workflow run
+   6. Wait for the green checkmark ✅
+
+❗ **Important Token Safety Rules**:
+1. **NEVER**:
+   - Share your tokens with anyone (except your instructor)
+   - Put tokens in your code or files
+   - Post tokens in chats or emails
+   - Take screenshots of tokens
+
+2. **ALWAYS**:
+   - Keep tokens in a secure place
+   - Use exact names: `GITHUB_TOKEN` and `ORG_SYNC_TOKEN`
+   - Tell your instructor if you think someone saw your token
+   - Create new tokens if you're unsure about security
+
+🆘 **Common Token Problems & Solutions**:
+
+1. **"Invalid Token" Error**:
+   - Check token names are exactly `GITHUB_TOKEN` and `ORG_SYNC_TOKEN`
+   - Make sure you copied the entire token (they're very long)
+   - Try generating a new GitHub token if needed
+
+2. **"Permission Denied" Error**:
+   - Check that all checkboxes were selected when creating the token
+   - Make sure you're using the correct token in each secret
+   - Ask your instructor to verify your organization access
+
+3. **"Workflow Failed" Error**:
+   - Check the Actions tab for specific error messages
+   - Take a screenshot of the error
+   - Send it to your instructor for help
+
+Need help? Contact your instructor with:
+1. Your repository name
+2. Screenshots of any errors
+3. Which step you're stuck on
+4. DO NOT send your tokens!
 
 ### Step 5: Daily Usage
 
