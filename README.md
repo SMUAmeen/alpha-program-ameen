@@ -59,7 +59,43 @@ This repository contains materials organized by levels (L1, L2) and weeks, along
 
 ### Step 4: Set Up Automatic Sync (One-Time Setup)
 
-1. **Create the Sync File**
+1. **Get Your Access Tokens** (Important!)
+   
+   You'll need two special passwords (tokens) to set up syncing:
+
+   a) **GitHub Personal Access Token**:
+   - Go to [GitHub Settings](https://github.com/settings/tokens)
+   - Click "Generate new token (classic)"
+   - For "Note" write: "Course Access Token"
+   - Set expiration to "No expiration"
+   - Check these boxes:
+     - [x] repo (all)
+     - [x] workflow
+     - [x] admin:org
+   - Click "Generate token" at the bottom
+   - 📝 COPY THE TOKEN AND SAVE IT! You won't see it again
+
+   b) **Organization Sync Token**:
+   - Ask your instructor for this token in class
+   - They will give you a code that starts with `ghp_` or `github_pat_`
+   - Save it somewhere safe!
+
+2. **Add Your Tokens to GitHub**
+   - Go to your repository on GitHub.com
+   - Click "Settings" tab
+   - Click "Secrets and variables" → "Actions"
+   - Click "New repository secret"
+   - Add your first token:
+     - Name: `GITHUB_TOKEN`
+     - Value: Paste your GitHub Personal Access Token
+     - Click "Add secret"
+   - Click "New repository secret" again
+   - Add your second token:
+     - Name: `ORG_SYNC_TOKEN`
+     - Value: Paste the token from your instructor
+     - Click "Add secret"
+
+3. **Create the Sync File**
    - In GitHub Desktop, click "Repository" → "Open in Finder/Explorer"
    - Create these folders inside your repository: `.github/workflows`
    - Inside the `workflows` folder, create a new file named `sync-to-org.yml`
@@ -94,14 +130,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
 ```
 
-2. **Add the Sync Token**
-   - Your instructor will send you an `ORG_SYNC_TOKEN`
-   - Go to your repository on GitHub.com
-   - Click "Settings" → "Secrets and variables" → "Actions"
-   - Click "New repository secret"
-   - For name, type: `ORG_SYNC_TOKEN`
-   - For value, paste the token your instructor sent
-   - Click "Add secret"
+4. **Test Your Setup**
+   - Go to the "Actions" tab in your repository
+   - You should see "Sync to Traders@SMU" workflow
+   - Make a small test change (like add a space to README.md)
+   - Commit and push the change
+   - Check if the sync works (green checkmark)
+
+❗ **Important Token Safety**:
+- Never share your tokens with anyone (except your instructor)
+- Don't put tokens in your files
+- If you accidentally expose a token, tell your instructor immediately
+- Keep your tokens somewhere safe - they're like passwords!
+
+🆘 **Token Problems?**
+1. Check the token names are exactly `GITHUB_TOKEN` and `ORG_SYNC_TOKEN`
+2. Make sure you copied the entire token (they're long!)
+3. Ask your instructor for help if needed
 
 ### Step 5: Daily Usage
 
