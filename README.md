@@ -27,7 +27,10 @@ Choose your level and navigate to the corresponding week to find materials and i
 1. Go to the [Traders@SMU student-template repository](https://github.com/Traders-SMU/student-template)
 2. Click the green "Use this template" button near the top of the page
 3. Select "Create a new repository"
-4. Name your repository (e.g., "alpha-program-yourname")
+4. Name your repository following this format: `traders-smu-LEVEL-FULLNAME`
+   - Replace LEVEL with either L1 or L2 (e.g., L1 for Junior, L2 for Associate)
+   - Replace FULLNAME with your full name, using hyphens instead of spaces
+   - Example: `traders-smu-L1-john-smith` or `traders-smu-L2-jane-doe`
 5. Choose whether to make it public or private
 6. Click "Create repository from template"
 
@@ -178,6 +181,87 @@ There are three methods to transfer your repository to the Traders@SMU organizat
    git fetch origin
    git status
    ```
+
+### Automated Repository Updates (Recommended Setup)
+
+To automatically sync your repository with the Traders@SMU organization, you can set up GitHub Actions. This will ensure your work is always backed up and visible to your instructors.
+
+1. Create a new file in your repository at `.github/workflows/sync-to-org.yml`:
+   ```bash
+   mkdir -p .github/workflows
+   touch .github/workflows/sync-to-org.yml
+   ```
+
+2. Add the following content to `sync-to-org.yml`:
+   ```yaml
+   name: Sync to Traders@SMU
+
+   on:
+     push:
+       branches:
+         - main
+     schedule:
+       - cron: '0 0 * * *'  # Runs daily at midnight
+
+   jobs:
+     sync-to-org:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Checkout repository
+           uses: actions/checkout@v2
+           with:
+             fetch-depth: 0
+             
+         - name: Push to Traders@SMU
+           run: |
+             git remote add traders-smu https://${{ secrets.GITHUB_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
+             git push traders-smu --all --force
+             git push traders-smu --tags --force
+           env:
+             GITHUB_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
+   ```
+
+3. Set up the required secret:
+   - Contact your program administrator to get your `ORG_SYNC_TOKEN`
+   - Go to your repository settings
+   - Click on "Secrets and variables" → "Actions"
+   - Click "New repository secret"
+   - Name: `ORG_SYNC_TOKEN`
+   - Value: (paste the token provided by your administrator)
+
+4. Verify the setup:
+   - Make a small change to any file
+   - Commit and push to your repository
+   - Go to the "Actions" tab on GitHub
+   - You should see the sync workflow running
+
+This automation will:
+- Sync your repository whenever you push to main
+- Perform a daily backup at midnight
+- Maintain your repository name format in the organization
+- Keep all branches and tags synchronized
+
+### Important Automation Notes
+
+1. **Repository Naming**:
+   - The automation assumes your repository follows the naming convention: `traders-smu-LEVEL-FULLNAME`
+   - If you need to rename your repository, contact your administrator
+
+2. **Sync Frequency**:
+   - Immediate sync: Happens after every push to main
+   - Daily backup: Runs at midnight UTC
+   - You can manually trigger a sync from the Actions tab
+
+3. **Troubleshooting Automation**:
+   - Check the Actions tab for error messages
+   - Ensure your `ORG_SYNC_TOKEN` is set correctly
+   - Verify your repository name follows the convention
+   - Contact your administrator if sync fails consistently
+
+4. **Security Considerations**:
+   - Never share your `ORG_SYNC_TOKEN`
+   - Don't modify the workflow file unless instructed
+   - Report any security concerns to your administrator
 
 ### Additional Resources
 
