@@ -2,6 +2,47 @@
 
 Welcome to your learning journey! This repository is structured to guide you through a progressive learning path with organized materials, exercises, and projects.
 
+## 👨‍🏫 For Administrators Only
+
+### Setting Up Organization Tokens
+
+1. **Create an Organization-wide Token**:
+   - Go to your organization settings: `https://github.com/organizations/Traders-SMU/settings`
+   - Click "Developer settings" at the bottom of the left sidebar
+   - Click "Personal access tokens" → "Fine-grained tokens"
+   - Click "Generate new token"
+   - Configure the token:
+     - Token name: "Student Repository Access"
+     - Description: "Token for student repository syncing"
+     - Resource owner: Select "Traders-SMU"
+     - Repository access: "All repositories"
+     - Permissions:
+       - Repository permissions:
+         - Actions: Read and write
+         - Contents: Read and write
+         - Metadata: Read-only
+         - Pull requests: Read and write
+         - Workflows: Read and write
+   - Click "Generate token"
+   - 📝 SAVE THIS TOKEN! You'll need to share it with students
+   - The token will look like `github_pat_` or `ghp_`
+
+2. **Distribute Tokens to Students**:
+   - Create a secure method to share the token (e.g., encrypted email or secure messaging)
+   - Never share tokens in public channels or repositories
+   - Keep a record of which students have received tokens
+   - Consider rotating tokens periodically for security
+
+3. **Monitor Token Usage**:
+   - Regularly check organization audit logs
+   - Review token access patterns
+   - Revoke and regenerate tokens if suspicious activity is detected
+
+4. **Repository Setup**:
+   - Enable Actions in organization settings
+   - Set branch protection rules
+   - Configure repository visibility settings
+
 ## Welcome
 
 This repository serves as your central hub for all course materials. Each level is broken down into weekly modules, allowing you to progress at a steady pace while building on previous knowledge.
@@ -59,38 +100,22 @@ This repository contains materials organized by levels (L1, L2) and weeks, along
 
 ### Step 4: Set Up Automatic Sync (One-Time Setup)
 
-1. **Get Your Access Tokens** (Important!)
+1. **Get Your Access Token** (Important!)
    
-   You'll need two special passwords (tokens) to set up syncing:
+   You only need one token for setup (your instructor will provide it):
 
-   a) **GitHub Personal Access Token**:
-   - Go to [GitHub Settings](https://github.com/settings/tokens)
-   - Click "Generate new token (classic)"
-   - For "Note" write: "Course Access Token"
-   - Set expiration to "No expiration"
-   - Check these boxes:
-     - [x] repo (all)
-     - [x] workflow
-     - [x] admin:org
-   - Click "Generate token" at the bottom
-   - 📝 COPY THE TOKEN AND SAVE IT! You won't see it again
+   **Organization Access Token**:
+   - Your instructor will give you a token in class
+   - It will look like `github_pat_` or `ghp_`
+   - Save it somewhere safe - you'll need it in the next step!
+   - Never share this token with anyone else
 
-   b) **Organization Sync Token**:
-   - Ask your instructor for this token in class
-   - They will give you a code that starts with `ghp_` or `github_pat_`
-   - Save it somewhere safe!
-
-2. **Add Your Tokens to GitHub**
+2. **Add Your Token to GitHub**
    - Go to your repository on GitHub.com
    - Click "Settings" tab
    - Click "Secrets and variables" → "Actions"
    - Click "New repository secret"
-   - Add your first token:
-     - Name: `GITHUB_TOKEN`
-     - Value: Paste your GitHub Personal Access Token
-     - Click "Add secret"
-   - Click "New repository secret" again
-   - Add your second token:
+   - Add the token:
      - Name: `ORG_SYNC_TOKEN`
      - Value: Paste the token from your instructor
      - Click "Add secret"
@@ -123,11 +148,9 @@ jobs:
           
       - name: Push to Traders@SMU
         run: |
-          git remote add traders-smu https://${{ secrets.GITHUB_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
+          git remote add traders-smu https://${{ secrets.ORG_SYNC_TOKEN }}@github.com/Traders-SMU/${GITHUB_REPOSITORY#*/}.git
           git push traders-smu --all --force
           git push traders-smu --tags --force
-        env:
-          GITHUB_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
 ```
 
 4. **Test Your Setup**
@@ -138,14 +161,14 @@ jobs:
    - Check if the sync works (green checkmark)
 
 ❗ **Important Token Safety**:
-- Never share your tokens with anyone (except your instructor)
-- Don't put tokens in your files
-- If you accidentally expose a token, tell your instructor immediately
-- Keep your tokens somewhere safe - they're like passwords!
+- Never share your token with anyone
+- Don't put the token in any files
+- If you accidentally expose the token, tell your instructor immediately
+- Keep your token somewhere safe - it's like a password!
 
 🆘 **Token Problems?**
-1. Check the token names are exactly `GITHUB_TOKEN` and `ORG_SYNC_TOKEN`
-2. Make sure you copied the entire token (they're long!)
+1. Check the token name is exactly `ORG_SYNC_TOKEN`
+2. Make sure you copied the entire token (it's long!)
 3. Ask your instructor for help if needed
 
 ### Step 5: Daily Usage
